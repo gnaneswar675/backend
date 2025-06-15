@@ -7,7 +7,10 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://community-report.onrender.com/", // 👈 use your actual frontend URL
+  credentials: true, // 👈 add this if you’re using cookies or auth headers
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
