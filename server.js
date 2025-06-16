@@ -8,7 +8,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "https://frontend-ii2y.onrender.com/", // 👈 use your actual frontend URL
+  origin: "https://community-report.onrender.com/", // 👈 use your actual frontend URL
   credentials: true, // 👈 add this if you’re using cookies or auth headers
 }));
 app.use(express.json());
