@@ -5,7 +5,7 @@ const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 const Problem = require('../models/problem');
 const multer = require('multer');
-const cloudinary = require('../config/CloudinaryConfig');
+const cloudinary = require('../config/cloudinaryConfig');
 
 // Setup multer storage
 const storage = multer.memoryStorage();
