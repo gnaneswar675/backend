@@ -1,13 +1,13 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express, { json } from 'express';
+import { connect } from 'mongoose';
+import cors from 'cors';
 require('dotenv').config();
 
 const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(json());
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -20,7 +20,7 @@ app.listen(PORT, () => {
   console.log(`\x1b[36m%s\x1b[0m`, `🚀 Server running on port ${PORT}`);
   
   // Then connect to MongoDB
-  mongoose.connect(process.env.MONGO_URI)
+  connect(process.env.MONGO_URI)
     .then(() => {
       console.log('\x1b[32m%s\x1b[0m', '📦 Connected to MongoDB');
     })
