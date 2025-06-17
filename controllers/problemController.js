@@ -1,19 +1,25 @@
 const Problem = require('../models/problem');
+const cloudinary = require('../config/CloudinaryConfig');
 
 exports.createProblem = async (req, res) => {
     try {
-        const { title, description } = req.body;
-        const image = req.file ? req.file.filename : null;
+        const { title, description, location, date, imageUrl, imagePublicId } = req.body;
 
         const problem = await Problem.create({
             title,
             description,
-            image,
+            location,
+            date,
+            image: {
+                url: imageUrl,
+                public_id: imagePublicId
+            },
             createdBy: req.user.id
         });
 
         res.status(201).json(problem);
     } catch (err) {
+        console.error('Error creating problem:', err);
         res.status(500).json({ message: 'Error creating problem' });
     }
 };

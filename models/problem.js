@@ -6,8 +6,8 @@ const ProblemSchema = new mongoose.Schema({
   location: { type: String, required: true },
   date: { type: String, required: true },
   image: {
-    url: String,
-    public_id: String
+    url: { type: String },
+    public_id: { type: String }
   },
   status: { type: String, default: 'pending' },
   votes: { type: Number, default: 0 },

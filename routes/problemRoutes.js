@@ -2,9 +2,14 @@
 
 const express = require('express');
 const router = express.Router();
-const { upload } = require('../config/cloudinaryConfig');
 const { protect } = require('../middleware/authMiddleware');
 const Problem = require('../models/problem');
+const multer = require('multer');
+const cloudinary = require('../config/CloudinaryConfig');
+
+// Setup multer storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // Get all problems
 router.get('/', async (req, res) => {
@@ -12,27 +17,39 @@ router.get('/', async (req, res) => {
     const problems = await Problem.find().sort({ createdAt: -1 });
     res.json(problems);
   } catch (err) {
-    console.error('Error fetching problems:', err);
-    res.status(500).json({ message: 'Server error while fetching problems' });
+    res.status(500).json({ message: 'Error fetching problems' });
   }
 });
 
-// Create a new problem
+// Create a new problem with image upload
 router.post('/', protect, upload.single('image'), async (req, res) => {
   try {
     const { title, description, location, date } = req.body;
-    const imageData = req.file ? {
-      url: req.file.path,
-      public_id: req.file.filename
-    } : null;
+    
+    let imageData = {};
+    
+    if (req.file) {
+      // Convert buffer to base64
+      const b64 = Buffer.from(req.file.buffer).toString('base64');
+      const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+      
+      // Upload to Cloudinary
+      const uploadResult = await cloudinary.uploader.upload(dataURI, {
+        folder: 'community-reporter'
+      });
+
+      imageData = {
+        url: uploadResult.secure_url,
+        public_id: uploadResult.public_id
+      };
+    }
 
     const problem = new Problem({
       title,
       description,
       location,
       date,
-      image: imageData,
-      status: 'pending'
+      image: imageData
     });
 
     await problem.save();
