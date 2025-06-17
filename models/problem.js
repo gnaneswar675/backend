@@ -5,7 +5,10 @@ const ProblemSchema = new mongoose.Schema({
   description: { type: String, required: true },
   location: { type: String, required: true },
   date: { type: String, required: true },
-  image: { type: String },
+  image: {
+    url: String,
+    public_id: String
+  },
   status: { type: String, default: 'pending' },
   votes: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
