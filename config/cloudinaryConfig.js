@@ -13,11 +13,10 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'community-reporter',
-    allowed_formats: ['jpg', 'jpeg', 'png'],
-    transformation: [{ width: 1000, height: 1000, crop: 'limit' }]
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif']
   }
 });
 
 const upload = multer({ storage });
 
-module.exports = { upload, cloudinary };
+module.exports = { cloudinary, upload };
