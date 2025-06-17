@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const upload = require('../middleware/upload');
+const { upload } = require('../config/cloudinaryConfig');
 const { protect } = require('../middleware/authMiddleware');
 const Problem = require('../models/problem');
 
@@ -21,14 +21,17 @@ router.get('/', async (req, res) => {
 router.post('/', protect, upload.single('image'), async (req, res) => {
   try {
     const { title, description, location, date } = req.body;
-    const image = req.file ? req.file.filename : null;
+    const imageData = req.file ? {
+      url: req.file.path,
+      public_id: req.file.filename
+    } : null;
 
     const problem = new Problem({
       title,
       description,
       location,
       date,
-      image,
+      image: imageData,
       status: 'pending'
     });
 
